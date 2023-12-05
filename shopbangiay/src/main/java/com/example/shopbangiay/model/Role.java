@@ -22,5 +22,5 @@ public class Role {
 
     @OneToMany(mappedBy = "role")
     @JsonBackReference
-    private Set<Account> accountSet;
+    private Set<UserRole> userRoleSet;
 }

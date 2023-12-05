@@ -17,6 +17,7 @@ public class Voucher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+    private String code;
     private int discountMoney;
     @ManyToOne
     @JoinColumn(name = "id_account",referencedColumnName = "id")

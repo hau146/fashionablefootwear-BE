@@ -33,9 +33,9 @@ public class Account {
     @Column(name = "is_deleted",columnDefinition = "bit(1) default 0")
     private Boolean isDeleted;
 
-    @ManyToOne
-    @JoinColumn(name = "id_role",referencedColumnName = "id")
-    private Role role;
+    @OneToMany(mappedBy = "account")
+    @JsonBackReference
+    private Set<UserRole> userRoleSet;
 
     @ManyToOne
     @JoinColumn(name = "id_rank",referencedColumnName = "id")

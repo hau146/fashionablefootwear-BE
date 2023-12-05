@@ -7,19 +7,19 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class VoucherRank {
+@Entity
+public class UserRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String name;
-    private String code;
-    private int discountMoney;
     @ManyToOne
-    @JoinColumn(name = "id_rank",referencedColumnName = "id")
-    private RankAccount rankAccount;
+    @JoinColumn(name = "id_role",referencedColumnName = "id")
+    private Role role;
+    @ManyToOne
+    @JoinColumn(name = "id_account",referencedColumnName = "id")
+    private Account account;
 }
