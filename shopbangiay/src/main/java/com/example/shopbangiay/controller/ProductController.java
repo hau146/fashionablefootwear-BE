@@ -39,7 +39,7 @@ public class ProductController {
     public ResponseEntity<Page<IProductDto>> getAllCandidate(@RequestParam(name = "limit", defaultValue = "3", required = false) int limit,
                                                              @RequestParam(name = "page", defaultValue = "0", required = false) int page,
                                                              @RequestParam(name = "nameProduct", defaultValue = "", required = false) String nameProduct,
-                                                             @RequestParam(name = "typeId", defaultValue = "1", required = false) String typeId) {
+                                                             @RequestParam(name = "typeId", defaultValue = "", required = false) String typeId) {
 
         Pageable pageable = PageRequest.of(page, limit);
         Page<IProductDto> productDtoList = productService.findAllProduct(pageable, nameProduct, typeId);

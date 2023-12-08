@@ -50,6 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         //All role
                         "/api/public/account/**",
+                        "/api/public/**",
 //                        "/api/user/login-by-username/**",
 //                        "/api/user/logout/{userName}/**",
                         "/api/home/**",
