@@ -16,4 +16,6 @@ public interface IProductService {
     IProductDetail findByAllIdProduct(Integer id);
     List<ISizeDto> findBySizeIdProduct(Integer id);
     List<IImageDto> findByImageIdProduct(Integer id);
+    void deleteById(Integer id);
+
 }

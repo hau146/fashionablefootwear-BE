@@ -19,6 +19,8 @@ public class Voucher {
     private String name;
     private String code;
     private int discountMoney;
+    @Column(name = "status_voucher",columnDefinition = "bit(1) default 1")
+    private boolean status;
     @ManyToOne
     @JoinColumn(name = "id_account",referencedColumnName = "id")
     private Account account;

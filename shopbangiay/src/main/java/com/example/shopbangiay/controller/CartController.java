@@ -1,9 +1,6 @@
 package com.example.shopbangiay.controller;
 
-import com.example.shopbangiay.dto.CartDto;
-import com.example.shopbangiay.dto.ICartDto;
-import com.example.shopbangiay.dto.IProductDetail;
-import com.example.shopbangiay.dto.IProductDto;
+import com.example.shopbangiay.dto.*;
 import com.example.shopbangiay.model.Cart;
 import com.example.shopbangiay.service.ICartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @CrossOrigin("*")
@@ -26,20 +25,31 @@ public class CartController {
     private ICartService cartService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Page<Cart>> showCartById(@RequestParam(name = "limit", defaultValue = "5", required = false) int limit,
-                                                   @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-                                                   @PathVariable int id) {
+    public ResponseEntity<Page<ICartDto>> showCartById(@RequestParam(name = "limit", defaultValue = "5", required = false) int limit,
+                                                       @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+                                                       @PathVariable int id) {
         Pageable pageable = PageRequest.of(page, limit);
-        Page<Cart> carts = cartService.showCartById(pageable, id);
-        if (carts.isEmpty()) {
+        Page<ICartDto> cartDtos = cartService.showCartById(pageable, id);
+        if (cartDtos.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(carts, HttpStatus.OK);
+        return new ResponseEntity<>(cartDtos, HttpStatus.OK);
     }
 
     @PostMapping("")
-    public ResponseEntity<CartDto> addToCart(@RequestBody CartDto cartDto){
-        cartService.addToCart(cartDto.getNumberProduct(), cartDto.getSizeProduct(), cartDto.getIdAccount(), cartDto.getIdProduct());
+    public ResponseEntity<CartDto> addToCart(@RequestBody CartDto cartDto) {
+        List<Cart> cartList = cartService.findAllCartBy(cartDto.getIdAccount());
+        boolean flag = true;
+        for (int i = 0; i < cartList.size(); i++) {
+            if(cartDto.getIdAccount() == cartList.get(i).getAccount().getId() && cartDto.getSizeProduct() == cartList.get(i).getSizeProduct()){
+                cartService.addNumberToProductInCart(cartDto.getIdProduct(), cartDto.getNumberProduct());
+                flag = false;
+                break;
+            }
+        }
+        if(flag){
+            cartService.addToCart(cartDto.getNumberProduct(), cartDto.getSizeProduct(), cartDto.getIdAccount(), cartDto.getIdProduct());
+        }
         if (cartService == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -51,4 +61,34 @@ public class CartController {
         Integer sumCart = cartService.sumProductInCart();
         return new ResponseEntity<>(sumCart, HttpStatus.OK);
     }
+
+    @PatchMapping("/increase")
+    public ResponseEntity<String> increasingTheNumber(@RequestParam(name = "id", defaultValue = "", required = false) Integer id) {
+        cartService.increasingTheNumber(id);
+        return ResponseEntity.ok("Sửa thành công");
+    }
+
+    @PatchMapping("/reduce")
+    public ResponseEntity<String> reduceTheNumberOf(@RequestParam(name = "id", defaultValue = "", required = false) Integer id) {
+        cartService.reduceTheNumberOf(id);
+        return ResponseEntity.ok("Sửa thành công");
+    }
+
+    @PostMapping("/payCart")
+    public ResponseEntity<String> payProduct(@RequestBody PayDto payDto) {
+        cartService.payProduct(payDto.getIdAccount(), payDto.getTotalPrice(), payDto.getIdDetailOrderStatus());
+        return ResponseEntity.ok("Sửa thành công");
+    }
+    @DeleteMapping("/deleteAfterPayment/{id}")
+    public ResponseEntity<String> deleteAfterPayment(@PathVariable Integer id) {
+        cartService.deleteAfterPayment(id);
+        return ResponseEntity.ok("Xóa thành công");
+    }
+
+    @GetMapping("/totalPrice/{id}")
+    public ResponseEntity<Double> totalPrice(@PathVariable int id) {
+        Double totalPrice = cartService.totalPriceProductInCart(id);
+        return new ResponseEntity<>(totalPrice, HttpStatus.OK);
+    }
+
 }

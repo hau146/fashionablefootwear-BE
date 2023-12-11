@@ -8,19 +8,14 @@ import com.example.shopbangiay.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface IProductRepository extends JpaRepository<Product, Integer> {
-//    @Query(value = "select product.id as id, product.name as `name`, product.number_product as numberProduct, product.price as price,\n" +
-//            "product.sell_number as sellNumber, product.shipping_cost as shippingCost, product.is_deleted as isDeleted,\n" +
-//            "image_product.image as image\n" +
-//            "from product left join image_product on product.id = image_product.id_product\n" +
-//            "where product.is_deleted = 0;", nativeQuery = true)
-//    List<IProductDto> findAllProduct();
-
     @Query(value = "select product.id as id, product.name as `name`, product.number_product as numberProduct, product.price as price,\n" +
             "    product.sell_number as sellNumber, product.shipping_cost as shippingCost, product.is_deleted as isDeleted,\n" +
             "    type_product.name as typeProduct,\n" +
@@ -50,4 +45,8 @@ public interface IProductRepository extends JpaRepository<Product, Integer> {
             "where product.id = :id", nativeQuery = true)
     List<IImageDto> findByImageIdProduct(@Param("id") Integer id);
 
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE product SET is_deleted = 1 WHERE id = :id", nativeQuery = true)
+    void deleteById(@Param("id") Integer id);
 }

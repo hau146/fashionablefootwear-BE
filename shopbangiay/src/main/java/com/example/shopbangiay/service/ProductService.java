@@ -37,4 +37,9 @@ public class ProductService implements IProductService{
         return productRepository.findByImageIdProduct(id);
     }
 
+    @Override
+    public void deleteById(Integer id) {
+        productRepository.deleteById(id);
+    }
+
 }

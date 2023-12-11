@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class CartDto {
     private Integer idAccount;
     private Integer idProduct;

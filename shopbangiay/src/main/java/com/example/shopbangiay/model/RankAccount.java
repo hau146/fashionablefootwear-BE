@@ -24,7 +24,7 @@ public class RankAccount {
     @JsonBackReference
     private Set<Account> accountSet;
 
-    @OneToMany(mappedBy = "rankAccount")
-    @JsonBackReference
-    private Set<VoucherRank> voucherRankSet;
+//    @OneToMany(mappedBy = "rankAccount")
+//    @JsonBackReference
+//    private Set<VoucherRank> voucherRankSet;
 }

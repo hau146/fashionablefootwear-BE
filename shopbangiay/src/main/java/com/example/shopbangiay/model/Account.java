@@ -38,7 +38,7 @@ public class Account {
     private Set<UserRole> userRoleSet;
 
     @ManyToOne
-    @JoinColumn(name = "id_rank",referencedColumnName = "id")
+    @JoinColumn(name = "id_rank",referencedColumnName = "id", columnDefinition = "int default 1")
     private RankAccount rankAccount;
 
     @OneToMany(mappedBy = "account")

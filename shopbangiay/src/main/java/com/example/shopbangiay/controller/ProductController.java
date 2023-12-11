@@ -25,22 +25,11 @@ public class ProductController {
     @Autowired
     public IProductService productService;
 
-//    @GetMapping("")
-//    public ResponseEntity<List<IProductDto>> findAll() {
-//        List<IProductDto> productDtoList = productService.findAllProduct();
-//        if (productDtoList.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        } else {
-//            return new ResponseEntity<>(productDtoList, HttpStatus.OK);
-//        }
-//    }
-
     @GetMapping
     public ResponseEntity<Page<IProductDto>> getAllCandidate(@RequestParam(name = "limit", defaultValue = "3", required = false) int limit,
                                                              @RequestParam(name = "page", defaultValue = "0", required = false) int page,
                                                              @RequestParam(name = "nameProduct", defaultValue = "", required = false) String nameProduct,
                                                              @RequestParam(name = "typeId", defaultValue = "", required = false) String typeId) {
-
         Pageable pageable = PageRequest.of(page, limit);
         Page<IProductDto> productDtoList = productService.findAllProduct(pageable, nameProduct, typeId);
         if (productDtoList.isEmpty()) {
@@ -71,5 +60,11 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(iImageDtoList, HttpStatus.OK);
+    }
+
+    @PatchMapping("/delete")
+    public ResponseEntity<String> deleteById(@RequestParam(name = "id", defaultValue = "", required = false) Integer id) {
+        productService.deleteById(id);
+        return ResponseEntity.ok("Sửa thành công");
     }
 }
