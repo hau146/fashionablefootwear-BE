@@ -47,26 +47,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable().cors().and()
                 .authorizeRequests()
-                .antMatchers(
-                        //All role
-                        "/api/public/account/**",
-                        "/api/public/**",
-//                        "/api/user/login-by-username/**",
-//                        "/api/user/logout/{userName}/**",
-                        "/api/home/**",
-                        "/api/home/search/**",
-                        "/api/user/**"
-                ).permitAll()
-                .antMatchers(
-
-                )
-
-                .hasAnyAuthority("ADMIN")
-                .antMatchers(
-
-                        //Authen Role admin and customer
-
-                ).hasAnyAuthority("ADMIN")
+                .antMatchers("/api/public/**").permitAll()
+                .antMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
+                .antMatchers("/api/member/**").hasAnyAuthority("ROLE_MEMBER")
 
                 .anyRequest()
                 .authenticated()

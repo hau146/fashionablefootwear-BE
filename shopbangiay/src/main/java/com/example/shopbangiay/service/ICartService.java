@@ -12,7 +12,8 @@ import java.util.List;
 
 public interface ICartService {
     Page<ICartDto> showCartById(Pageable pageable, Integer id);
-    List<Cart> findAllCartBy(Integer id);
+    Cart findCartById(Integer id);
+    List<Cart> findAllCartByIdAccount(Integer id);
     void addNumberToProductInCart(Integer id, Integer number);
     void addToCart(Integer numberProduct,Integer sizeProduct,Integer idAccount,Integer idProduct);
     Integer sumProductInCart();
@@ -21,5 +22,7 @@ public interface ICartService {
     void reduceTheNumberOf(Integer id);
     void payProduct(Integer idAccount, Double totalPrice, Integer idDetailOrderStatus);
     void deleteAfterPayment(Integer id);
+    void deleteProductInCart(Integer id);
+    void selectPay(Integer id, Integer numberSelect);
 
 }

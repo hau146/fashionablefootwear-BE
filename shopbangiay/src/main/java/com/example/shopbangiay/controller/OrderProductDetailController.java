@@ -31,4 +31,17 @@ public class OrderProductDetailController {
         }
         return new ResponseEntity<>(orderProductDetailDtoPage, HttpStatus.OK);
     }
+
+    @GetMapping("/sumTotalPrice/{id}")
+    public ResponseEntity<Double> sumTotalPriceById(@PathVariable int id) {
+        Double sumTotalPriceById = orderProductDetailService.sumTotalPriceById(id);
+        return new ResponseEntity<>(sumTotalPriceById, HttpStatus.OK);
+    }
+
+    @PatchMapping("/updateRankAccount")
+    public ResponseEntity<String> reduceTheNumberOf(@RequestParam(name = "id", defaultValue = "", required = false) Integer id,
+                                                    @RequestParam(name = "number", defaultValue = "", required = false) Integer number) {
+        orderProductDetailService.updateRankAccount(id, number);
+        return ResponseEntity.ok("Sửa thành công");
+    }
 }

@@ -38,16 +38,16 @@ public class CartController {
 
     @PostMapping("")
     public ResponseEntity<CartDto> addToCart(@RequestBody CartDto cartDto) {
-        List<Cart> cartList = cartService.findAllCartBy(cartDto.getIdAccount());
+        List<Cart> cartList = cartService.findAllCartByIdAccount(cartDto.getIdAccount());
         boolean flag = true;
         for (int i = 0; i < cartList.size(); i++) {
-            if(cartDto.getIdAccount() == cartList.get(i).getAccount().getId() && cartDto.getSizeProduct() == cartList.get(i).getSizeProduct()){
+            if (cartDto.getIdProduct() == cartList.get(i).getProduct().getId() && cartDto.getSizeProduct() == cartList.get(i).getSizeProduct()) {
                 cartService.addNumberToProductInCart(cartDto.getIdProduct(), cartDto.getNumberProduct());
                 flag = false;
                 break;
             }
         }
-        if(flag){
+        if (flag) {
             cartService.addToCart(cartDto.getNumberProduct(), cartDto.getSizeProduct(), cartDto.getIdAccount(), cartDto.getIdProduct());
         }
         if (cartService == null) {
@@ -74,14 +74,33 @@ public class CartController {
         return ResponseEntity.ok("Sửa thành công");
     }
 
+    @PatchMapping("/selectPay")
+    public ResponseEntity<String> selectPay(@RequestParam(name = "id", defaultValue = "", required = false) Integer id) {
+        Cart cart = cartService.findCartById(id);
+        if (cart.isSelectPay()) {
+            cartService.selectPay(id, 0);
+            return ResponseEntity.status(HttpStatus.CREATED).body("");
+        } else {
+            cartService.selectPay(id, 1);
+            return ResponseEntity.ok("Sửa thành công");
+        }
+    }
+
     @PostMapping("/payCart")
     public ResponseEntity<String> payProduct(@RequestBody PayDto payDto) {
         cartService.payProduct(payDto.getIdAccount(), payDto.getTotalPrice(), payDto.getIdDetailOrderStatus());
         return ResponseEntity.ok("Sửa thành công");
     }
+
     @DeleteMapping("/deleteAfterPayment/{id}")
     public ResponseEntity<String> deleteAfterPayment(@PathVariable Integer id) {
         cartService.deleteAfterPayment(id);
+        return ResponseEntity.ok("Xóa thành công");
+    }
+
+    @DeleteMapping("/deleteProductInCart/{id}")
+    public ResponseEntity<String> deleteProductInCart(@PathVariable Integer id) {
+        cartService.deleteProductInCart(id);
         return ResponseEntity.ok("Xóa thành công");
     }
 

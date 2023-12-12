@@ -20,7 +20,7 @@ import java.util.List;
 @Controller
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/public/product")
+    @RequestMapping("/api/public/product")
 public class ProductController {
     @Autowired
     public IProductService productService;

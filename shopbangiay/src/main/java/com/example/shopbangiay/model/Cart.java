@@ -18,6 +18,8 @@ public class Cart {
     private int id;
     private int numberProduct;
     private int sizeProduct;
+    @Column(name = "select_pay",columnDefinition = "bit(1) default 0")
+    private boolean selectPay;
 
     @ManyToOne
     @JoinColumn(name = "id_account",referencedColumnName = "id")

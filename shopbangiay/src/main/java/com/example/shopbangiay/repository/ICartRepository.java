@@ -43,12 +43,16 @@ public interface ICartRepository extends JpaRepository<Cart, Integer> {
             "  type_product.`name`\n" +
             "order by cart.id desc", nativeQuery = true)
     Page<ICartDto> showCartById(Pageable pageable, @Param("id") Integer id);
+    @Query(value = "SELECT * FROM shopbangiay.cart where id = :id", nativeQuery = true)
+    Cart findCartById(@Param("id") Integer id);
+
+
     @Query(value = "SELECT * FROM shopbangiay.cart where id_account = :id", nativeQuery = true)
-    List<Cart> findAllCartBy(Integer id);
+    List<Cart> findAllCartByIdAccount(Integer id);
     @Transactional
     @Modifying
     @Query(value = "UPDATE cart SET number_product = (number_product + :number) WHERE id_product = :id", nativeQuery = true)
-    void addNumberToProductInCart(Integer id, Integer number);
+    void addNumberToProductInCart(@Param("id") Integer id, Integer number);
 
     @Transactional
     @Modifying
@@ -84,6 +88,11 @@ public interface ICartRepository extends JpaRepository<Cart, Integer> {
 
     @Transactional
     @Modifying
-    @Query(value = "DELETE FROM cart WHERE id_account = :id", nativeQuery = true)
+    @Query(value = "DELETE FROM cart WHERE id_account = :id AND select_pay = 1", nativeQuery = true)
     void deleteAfterPayment(@Param("id") Integer id);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE cart SET select_pay = :numberSelect WHERE id = :id", nativeQuery = true)
+    void selectPay(@Param("id") Integer id, @Param("numberSelect") Integer numberSelect);
 }

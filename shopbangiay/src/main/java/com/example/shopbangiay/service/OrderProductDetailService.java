@@ -16,4 +16,14 @@ public class OrderProductDetailService implements IOrderProductDetailService{
     public Page<IOrderProductDetailDto> findAllById(Pageable pageable, Integer id) {
         return orderProductDetailRepository.findAllById(pageable, id);
     }
+
+    @Override
+    public Double sumTotalPriceById(Integer id) {
+        return orderProductDetailRepository.sumTotalPriceById(id);
+    }
+
+    @Override
+    public void updateRankAccount(Integer id, Integer number) {
+        orderProductDetailRepository.updateRankAccount(id, number);
+    }
 }

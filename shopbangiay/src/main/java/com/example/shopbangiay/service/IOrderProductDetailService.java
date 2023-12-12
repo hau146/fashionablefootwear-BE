@@ -7,4 +7,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface IOrderProductDetailService {
     Page<IOrderProductDetailDto> findAllById(Pageable pageable, Integer id);
+    Double sumTotalPriceById(Integer id);
+    void updateRankAccount(Integer id,Integer number);
 }

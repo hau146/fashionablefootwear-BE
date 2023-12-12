@@ -22,8 +22,13 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public List<Cart> findAllCartBy(Integer id) {
-        return cartRepository.findAllCartBy(id);
+    public Cart findCartById(Integer id) {
+        return cartRepository.findCartById(id);
+    }
+
+    @Override
+    public List<Cart> findAllCartByIdAccount(Integer id) {
+        return cartRepository.findAllCartByIdAccount(id);
     }
 
     @Override
@@ -65,5 +70,16 @@ public class CartService implements ICartService {
     @Override
     public void deleteAfterPayment(Integer id) {
         cartRepository.deleteAfterPayment(id);
+    }
+
+    @Override
+    public void deleteProductInCart(Integer id) {
+        Cart cart = cartRepository.findCartById(id);
+        cartRepository.delete(cart);
+    }
+
+    @Override
+    public void selectPay(Integer id, Integer numberSelect) {
+        cartRepository.selectPay(id, numberSelect);
     }
 }

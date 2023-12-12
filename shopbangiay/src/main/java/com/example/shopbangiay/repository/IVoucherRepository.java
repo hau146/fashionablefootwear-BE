@@ -13,7 +13,7 @@ public interface IVoucherRepository extends JpaRepository<Voucher,Integer> {
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE voucher SET status_voucher = '0' WHERE id = :id", nativeQuery = true)
+    @Query(value = "UPDATE voucher SET status_voucher = 0 WHERE id = :id", nativeQuery = true)
     void setStatusVoucher(@Param("id") Integer id);
 
     @Query(value = "select * from voucher where id_account = :id", nativeQuery = true)
