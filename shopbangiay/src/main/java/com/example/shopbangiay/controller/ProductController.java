@@ -20,7 +20,7 @@ import java.util.List;
 @Controller
 @CrossOrigin("*")
 @RestController
-    @RequestMapping("/api/public/product")
+@RequestMapping("/api/public/product")
 public class ProductController {
     @Autowired
     public IProductService productService;
@@ -29,9 +29,24 @@ public class ProductController {
     public ResponseEntity<Page<IProductDto>> getAllCandidate(@RequestParam(name = "limit", defaultValue = "3", required = false) int limit,
                                                              @RequestParam(name = "page", defaultValue = "0", required = false) int page,
                                                              @RequestParam(name = "nameProduct", defaultValue = "", required = false) String nameProduct,
-                                                             @RequestParam(name = "typeId", defaultValue = "", required = false) String typeId) {
+                                                             @RequestParam(name = "typeId", defaultValue = "", required = false) String typeId,
+                                                             @RequestParam(name = "typeSort", defaultValue = "0", required = false) int typeSort) {
+
         Pageable pageable = PageRequest.of(page, limit);
-        Page<IProductDto> productDtoList = productService.findAllProduct(pageable, nameProduct, typeId);
+        Page<IProductDto> productDtoList;
+
+        if (typeSort == 1) {
+            productDtoList = productService.findAllProductSort(pageable, nameProduct, typeId, "price", "asc");
+        } else if (typeSort == 2) {
+            productDtoList = productService.findAllProductSort(pageable, nameProduct, typeId, "price", "desc");
+        } else if (typeSort == 3) {
+            productDtoList = productService.findAllProductSort(pageable, nameProduct, typeId, "sellNumber", "asc");
+        } else if (typeSort == 4) {
+            productDtoList = productService.findAllProductSort(pageable, nameProduct, typeId, "sellNumber", "desc");
+        } else {
+            productDtoList = productService.findAllProduct(pageable, nameProduct, typeId);
+        }
+
         if (productDtoList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

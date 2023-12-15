@@ -13,13 +13,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProductService implements IProductService{
+public class ProductService implements IProductService {
     @Autowired
     public IProductRepository productRepository;
 
     @Override
     public Page<IProductDto> findAllProduct(Pageable pageable, String nameProduct, String typeId) {
         return productRepository.findAllProduct(pageable, "%" + nameProduct + "%", "%" + typeId + "%");
+    }
+
+    @Override
+    public Page<IProductDto> findAllProductSort(Pageable pageable, String nameProduct, String typeId, String nameSort, String typeSort) {
+        return productRepository.findAllProductSort(pageable, "%" + nameProduct + "%", "%" + typeId + "%", nameSort, typeSort);
     }
 
     @Override

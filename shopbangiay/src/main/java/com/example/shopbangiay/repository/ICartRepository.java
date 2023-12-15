@@ -61,8 +61,8 @@ public interface ICartRepository extends JpaRepository<Cart, Integer> {
             "VALUES (:numberProduct, :sizeProduct, :idAccount, :idProduct)", nativeQuery = true)
     void addToCart(@Param("numberProduct") Integer numberProduct, @Param("sizeProduct") Integer sizeProduct, @Param("idAccount") Integer idAccount, @Param("idProduct") Integer idProduct);
 
-    @Query(value = "SELECT SUM(number_product) AS total_number_product\n" +
-            "FROM cart;", nativeQuery = true)
+    @Query(value = "SELECT count(id) AS total_number_product\n" +
+            "FROM cart", nativeQuery = true)
     Integer sumProductInCart();
 
     @Query(value = "SELECT SUM(product.price * cart.number_product) AS total_price\n" +

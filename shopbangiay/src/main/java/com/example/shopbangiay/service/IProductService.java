@@ -13,6 +13,7 @@ import java.util.List;
 public interface IProductService {
     //    List<IProductDto> findAllProduct();
     Page<IProductDto> findAllProduct(Pageable pageable, String nameProduct, String typeId);
+    Page<IProductDto> findAllProductSort(Pageable pageable, String nameProduct, String typeId, String nameSort, String typeSort);
     IProductDetail findByAllIdProduct(Integer id);
     List<ISizeDto> findBySizeIdProduct(Integer id);
     List<IImageDto> findByImageIdProduct(Integer id);

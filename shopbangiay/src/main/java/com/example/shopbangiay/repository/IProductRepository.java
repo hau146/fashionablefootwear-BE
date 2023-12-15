@@ -16,6 +16,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 public interface IProductRepository extends JpaRepository<Product, Integer> {
+
     @Query(value = "select product.id as id, product.name as `name`, product.number_product as numberProduct, product.price as price,\n" +
             "    product.sell_number as sellNumber, product.shipping_cost as shippingCost, product.is_deleted as isDeleted,\n" +
             "    type_product.name as typeProduct,\n" +
@@ -25,6 +26,26 @@ public interface IProductRepository extends JpaRepository<Product, Integer> {
             "    where product.name like :nameProduct and type_product.id like :typeId and product.is_deleted = 0\n" +
             "    group by product.id", nativeQuery = true)
     Page<IProductDto> findAllProduct(Pageable pageable, @Param("nameProduct") String nameProduct, @Param("typeId") String typeId);
+
+    @Query(value = "SELECT product.id as id, product.name as name, product.number_product as numberProduct, " +
+            "product.price as price, product.sell_number as sellNumber, product.shipping_cost as shippingCost, " +
+            "product.is_deleted as isDeleted, type_product.name as typeProduct, " +
+            "MIN(image_product.image) as image " +
+            "FROM product " +
+            "LEFT JOIN type_product ON product.id_type_product = type_product.id " +
+            "LEFT JOIN image_product ON product.id = image_product.id_product " +
+            "WHERE product.name LIKE :nameProduct AND type_product.id LIKE :typeId AND product.is_deleted = 0 " +
+            "GROUP BY product.id " +
+            "ORDER BY " +
+            "CASE WHEN :nameSort = 'price' AND :typeSort = 'asc' THEN product.price END ASC, " +
+            "CASE WHEN :nameSort = 'price' AND :typeSort = 'desc' THEN product.price END DESC, " +
+            "CASE WHEN :nameSort = 'sellNumber' AND :typeSort = 'asc' THEN product.sell_number END ASC, " +
+            "CASE WHEN :nameSort = 'sellNumber' AND :typeSort = 'desc' THEN product.sell_number END DESC", nativeQuery = true)
+    Page<IProductDto> findAllProductSort(Pageable pageable, @Param("nameProduct") String nameProduct,
+                                         @Param("typeId") String typeId, @Param("nameSort") String nameSort,
+                                         @Param("typeSort") String typeSort);
+
+
 
     @Query(value = "select product.id as id, product.name as `name`, product.number_product as numberProduct, product.price as price,\n" +
             "product.sell_number as sellNumber, product.shipping_cost as shippingCost, product.is_deleted as isDeleted,\n" +
